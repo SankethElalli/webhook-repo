@@ -11,16 +11,16 @@ def github_webhook():
     event_type = request.headers.get("X-GitHub-Event")
     payload = request.json
 
-    if event_type == "push":
+    if event_type == "Push":
         data = format_push(payload)
 
-    elif event_type == "pull_request":
+    elif event_type == "Pull_request":
         action = payload["action"]
 
-        if action == "opened":
+        if action == "Opened":
             data = format_pull_request(payload)
 
-        elif action == "closed" and payload["pull_request"]["merged"]:
+        elif action == "Closed" and payload["Pull_request"]["Merged"]:
             data = format_merge(payload)
 
         else:
@@ -34,8 +34,14 @@ def github_webhook():
 
 @app.route("/events", methods=["GET"])
 def get_events():
-    events = list(events_collection.find({}, {"_id": 0}).sort("timestamp", -1).limit(20))
+    events = list(
+        events_collection
+        .find({}, {"_id": 0})
+        .sort("timestamp", -1)   # LATEST FIRST
+        .limit(20)
+    )
     return jsonify(events)
+
 
 if __name__ == "__main__":
     app.run(port=5000)

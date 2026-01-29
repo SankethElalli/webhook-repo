@@ -1,10 +1,15 @@
+from datetime import datetime
+
+def parse_time(ts):
+    return datetime.fromisoformat(ts.replace("Z", "+00:00"))
+
 def format_push(payload):
     return {
         "type": "PUSH",
         "author": payload["pusher"]["name"],
         "from_branch": None,
         "to_branch": payload["ref"].split("/")[-1],
-        "timestamp": payload["head_commit"]["timestamp"]
+        "timestamp": parse_time(payload["head_commit"]["timestamp"])
     }
 
 def format_pull_request(payload):
@@ -13,7 +18,7 @@ def format_pull_request(payload):
         "author": payload["pull_request"]["user"]["login"],
         "from_branch": payload["pull_request"]["head"]["ref"],
         "to_branch": payload["pull_request"]["base"]["ref"],
-        "timestamp": payload["pull_request"]["created_at"]
+        "timestamp": parse_time(payload["pull_request"]["created_at"])
     }
 
 def format_merge(payload):
@@ -22,5 +27,5 @@ def format_merge(payload):
         "author": payload["pull_request"]["merged_by"]["login"],
         "from_branch": payload["pull_request"]["head"]["ref"],
         "to_branch": payload["pull_request"]["base"]["ref"],
-        "timestamp": payload["pull_request"]["merged_at"]
+        "timestamp": parse_time(payload["pull_request"]["merged_at"])
     }
