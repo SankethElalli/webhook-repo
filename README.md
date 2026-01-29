@@ -61,6 +61,3 @@ Just open `frontend/index.html` in your browser.
 - Python 3.8+
 - MongoDB (local or Atlas)
 - Flask, pymongo, flask-cors, python-dotenv
-
-## License
-MIT
